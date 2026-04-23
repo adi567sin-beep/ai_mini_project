@@ -39,7 +39,6 @@ MAX_SIZE_MB = 10
 
 
 def match_sensitive(text: str):
-    """Return (label, score) if text matches any pattern, else None."""
     clean = text.replace(" ", "")
     for label, score, pattern in PATTERNS:
         if pattern.search(clean) or pattern.search(text):
@@ -60,12 +59,7 @@ def blur_region(image: np.ndarray, bbox) -> np.ndarray:
 
 
 def compute_risk(detections: list[dict]) -> dict:
-    """
-    Score:   sum of per-detection weights, capped at 100
-    Level:   LOW < 30  /  MEDIUM 30-59  /  HIGH 60-84  /  CRITICAL 85+
-    """
     total = min(sum(d["score"] for d in detections), 100)
-
     if total >= 85:
         level, color = "CRITICAL", "#ff4d6d"
     elif total >= 60:
@@ -74,7 +68,6 @@ def compute_risk(detections: list[dict]) -> dict:
         level, color = "MEDIUM", "#facc15"
     else:
         level, color = "LOW", "#2ee8c0"
-
     return {"score": total, "level": level, "color": color}
 
 
@@ -116,7 +109,6 @@ async def upload_file(file: UploadFile = File(...)):
     if not success:
         raise HTTPException(status_code=500, detail="Failed to encode output image")
 
-    # Encode detection types as comma-separated string for the header
     found_types = ",".join(sorted(set(d["type"] for d in detections))) or "none"
 
     return StreamingResponse(
