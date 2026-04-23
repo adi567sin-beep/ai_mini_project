@@ -1,0 +1,2 @@
+# ai_mini_project
+AI-BASED PRIVACY RISK DETECTOR
