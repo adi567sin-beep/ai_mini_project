@@ -54,6 +54,7 @@
 
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; }
 
+    /* ── Drop zone ── */
     .drop-zone {
       border: 2px dashed var(--border); border-radius: calc(var(--radius) - 4px);
       padding: 3rem 2rem; text-align: center; cursor: pointer;
@@ -66,6 +67,7 @@
     .drop-zone p strong { color: var(--accent); font-weight: 500; }
     .drop-zone .file-name { margin-top: .75rem; font-family: var(--font-mono); font-size: .78rem; color: var(--accent2); word-break: break-all; }
 
+    /* ── Preview ── */
     .preview-strip { display: none; gap: 1.25rem; margin-top: 1.5rem; }
     .preview-strip.visible { display: grid; grid-template-columns: 1fr 1fr; }
     .img-box { display: flex; flex-direction: column; gap: .5rem; }
@@ -73,6 +75,89 @@
     .img-box img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; border: 1px solid var(--border); background: var(--bg); }
     .img-box img.hidden { display: none; }
 
+    /* ── Risk panel ── */
+    .risk-panel {
+      display: none;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border);
+      border-radius: calc(var(--radius) - 4px);
+      overflow: hidden;
+    }
+    .risk-panel.visible { display: block; }
+
+    .risk-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: .9rem 1.2rem;
+      background: rgba(255,255,255,.03);
+      border-bottom: 1px solid var(--border);
+    }
+    .risk-title {
+      font-family: var(--font-mono);
+      font-size: .7rem;
+      letter-spacing: .12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .risk-badge {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      font-weight: 500;
+      padding: .25rem .7rem;
+      border-radius: 100px;
+      border: 1px solid currentColor;
+      letter-spacing: .08em;
+    }
+
+    .risk-body { padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: .9rem; }
+
+    /* score bar */
+    .score-row { display: flex; align-items: center; gap: .9rem; }
+    .score-num {
+      font-family: var(--font-mono);
+      font-size: 2rem;
+      font-weight: 500;
+      min-width: 3ch;
+      line-height: 1;
+    }
+    .bar-track {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .bar-fill {
+      height: 100%;
+      border-radius: 100px;
+      width: 0%;
+      transition: width .6s cubic-bezier(.4,0,.2,1);
+    }
+
+    /* detected types */
+    .type-row { display: flex; flex-wrap: wrap; gap: .4rem; }
+    .type-chip {
+      font-family: var(--font-mono);
+      font-size: .68rem;
+      padding: .22rem .6rem;
+      border-radius: 100px;
+      border: 1px solid;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    /* verdict */
+    .verdict {
+      font-family: var(--font-mono);
+      font-size: .75rem;
+      color: var(--muted);
+      line-height: 1.6;
+      padding-top: .2rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ── Buttons ── */
     .actions { margin-top: 1.5rem; display: flex; gap: .75rem; flex-wrap: wrap; }
     button { font-family: var(--font-head); font-weight: 700; font-size: .9rem; border: none; border-radius: 8px; cursor: pointer; padding: .75rem 1.5rem; transition: opacity .2s, transform .1s; }
     button:active { transform: scale(.98); }
@@ -81,6 +166,7 @@
     #resetBtn { background: transparent; border: 1px solid var(--border); color: var(--muted); }
     #resetBtn:hover { border-color: var(--danger); color: var(--danger); }
 
+    /* ── Status ── */
     .status-bar { margin-top: 1.25rem; display: none; align-items: center; gap: .6rem; font-family: var(--font-mono); font-size: .78rem; }
     .status-bar.visible { display: flex; }
     .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
@@ -91,9 +177,6 @@
 
     #downloadBtn { display: none; background: transparent; border: 1px solid var(--accent); color: var(--accent); width: 100%; margin-top: .75rem; }
     #downloadBtn.visible { display: block; }
-
-    .tag-list { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: 1rem; }
-    .tag { font-family: var(--font-mono); font-size: .68rem; padding: .2rem .55rem; border-radius: 100px; background: rgba(255,77,109,.08); border: 1px solid rgba(255,77,109,.25); color: var(--danger); }
 
     footer { text-align: center; font-family: var(--font-mono); font-size: .7rem; color: var(--muted); line-height: 1.7; }
 
@@ -106,10 +189,11 @@
   <header>
     <div class="badge">OCR · Pattern Match · Gaussian Blur</div>
     <h1>Privacy <span>Risk</span> Detector</h1>
-    <p>Detects &amp; blurs Phone · Aadhaar · PAN · Vehicle · Email</p>
+    <p>Detects &amp; blurs Phone · Aadhaar · PAN · Vehicle · Email · DOB</p>
   </header>
 
   <div class="card">
+
     <div class="drop-zone" id="dropZone">
       <input type="file" id="fileInput" accept="image/*"/>
       <div class="drop-icon">🖼️</div>
@@ -129,6 +213,24 @@
       </div>
     </div>
 
+    <!-- Risk Panel -->
+    <div class="risk-panel" id="riskPanel">
+      <div class="risk-header">
+        <span class="risk-title">Privacy Risk Assessment</span>
+        <span class="risk-badge" id="riskBadge">—</span>
+      </div>
+      <div class="risk-body">
+        <div class="score-row">
+          <span class="score-num" id="scoreNum">0</span>
+          <div class="bar-track">
+            <div class="bar-fill" id="barFill"></div>
+          </div>
+        </div>
+        <div class="type-row" id="typeRow"></div>
+        <div class="verdict" id="verdict"></div>
+      </div>
+    </div>
+
     <div class="actions">
       <button id="detectBtn" onclick="detect()" disabled>Detect &amp; Blur →</button>
       <button id="resetBtn" onclick="reset()">Reset</button>
@@ -139,24 +241,22 @@
       <span class="status-text" id="statusText">Running OCR…</span>
     </div>
 
-    <div class="tag-list" id="tagList"></div>
-
     <button id="downloadBtn" onclick="download()">⬇ Download Redacted Image</button>
   </div>
 
   <footer>
     Processing happens on your local server · Images are not stored<br/>
-    Supports Indian PAN, Aadhaar (4-4-4), phone numbers, vehicle reg &amp; email
+    Supports Indian PAN, Aadhaar (4-4-4), phone numbers, vehicle reg, email &amp; DOB
   </footer>
 </div>
 
 <script>
   const API = "http://127.0.0.1:8000/upload/";
   let selectedFile = null;
-  let outputBlob = null;
+  let outputBlob   = null;
 
   const fileInput = document.getElementById("fileInput");
-  const dropZone = document.getElementById("dropZone");
+  const dropZone  = document.getElementById("dropZone");
 
   fileInput.addEventListener("change", e => handleFile(e.target.files[0]));
   dropZone.addEventListener("dragover", e => { e.preventDefault(); dropZone.classList.add("drag-over"); });
@@ -179,7 +279,7 @@
     document.getElementById("outputImg").classList.add("hidden");
     document.getElementById("detectBtn").disabled = false;
     document.getElementById("downloadBtn").classList.remove("visible");
-    document.getElementById("tagList").innerHTML = "";
+    document.getElementById("riskPanel").classList.remove("visible");
     clearStatus();
   }
 
@@ -199,19 +299,26 @@
         throw new Error(err.detail || `HTTP ${res.status}`);
       }
 
-      const blurredCount = parseInt(res.headers.get("X-Blurred-Regions") ?? "0", 10);
+      const blurredCount  = parseInt(res.headers.get("X-Blurred-Regions") ?? "0", 10);
+      const riskScore     = parseInt(res.headers.get("X-Risk-Score")      ?? "0", 10);
+      const riskLevel     = res.headers.get("X-Risk-Level")  ?? "LOW";
+      const riskColor     = res.headers.get("X-Risk-Color")  ?? "#2ee8c0";
+      const detectedTypes = res.headers.get("X-Detected-Types") ?? "none";
+
       outputBlob = await res.blob();
 
       const outImg = document.getElementById("outputImg");
       outImg.src = URL.createObjectURL(outputBlob);
       outImg.classList.remove("hidden");
 
+      showRisk(riskScore, riskLevel, riskColor, detectedTypes, blurredCount);
+
       if (blurredCount === 0) {
         showStatus("No sensitive data detected — image unchanged.", "success", false);
       } else {
-        showStatus(`Done! ${blurredCount} sensitive region${blurredCount > 1 ? "s" : ""} blurred.`, "success", false);
-        showTags(blurredCount);
+        showStatus(`Done! ${blurredCount} region${blurredCount > 1 ? "s" : ""} blurred.`, "success", false);
       }
+
       document.getElementById("downloadBtn").classList.add("visible");
 
     } catch (err) {
@@ -219,6 +326,48 @@
     } finally {
       document.getElementById("detectBtn").disabled = false;
     }
+  }
+
+  function showRisk(score, level, color, typesStr, blurredCount) {
+    document.getElementById("riskPanel").classList.add("visible");
+
+    // Badge
+    const badge = document.getElementById("riskBadge");
+    badge.textContent = level;
+    badge.style.color = color;
+    badge.style.borderColor = color;
+
+    // Score + bar
+    document.getElementById("scoreNum").textContent = score;
+    document.getElementById("scoreNum").style.color = color;
+    const fill = document.getElementById("barFill");
+    fill.style.background = color;
+    setTimeout(() => fill.style.width = score + "%", 50);
+
+    // Type chips
+    const row = document.getElementById("typeRow");
+    row.innerHTML = "";
+    if (typesStr && typesStr !== "none") {
+      typesStr.split(",").forEach(t => {
+        const chip = document.createElement("span");
+        chip.className = "type-chip";
+        chip.textContent = t.trim();
+        chip.style.color = color;
+        chip.style.borderColor = color;
+        chip.style.background = color + "15";
+        row.appendChild(chip);
+      });
+    }
+
+    // Verdict text
+    const verdicts = {
+      LOW:      "✅ Minimal risk. No highly sensitive identifiers found.",
+      MEDIUM:   "⚠️  Moderate risk. Some personal data detected and redacted.",
+      HIGH:     "🔴 High risk. Multiple sensitive identifiers found. Review carefully.",
+      CRITICAL: "🚨 Critical risk. This document contains highly sensitive PII. Do not share unredacted."
+    };
+    document.getElementById("verdict").textContent =
+      (verdicts[level] ?? "") + (blurredCount > 0 ? ` ${blurredCount} region${blurredCount > 1 ? "s" : ""} have been blurred.` : "");
   }
 
   function download() {
@@ -231,7 +380,7 @@
 
   function reset() {
     selectedFile = null;
-    outputBlob = null;
+    outputBlob   = null;
     fileInput.value = "";
     document.getElementById("fileName").textContent = "";
     document.getElementById("previewImg").src = "";
@@ -240,7 +389,8 @@
     document.getElementById("previewStrip").classList.remove("visible");
     document.getElementById("detectBtn").disabled = true;
     document.getElementById("downloadBtn").classList.remove("visible");
-    document.getElementById("tagList").innerHTML = "";
+    document.getElementById("riskPanel").classList.remove("visible");
+    document.getElementById("barFill").style.width = "0%";
     clearStatus();
   }
 
@@ -255,17 +405,6 @@
 
   function clearStatus() {
     document.getElementById("statusBar").classList.remove("visible");
-  }
-
-  function showTags(count) {
-    const list = document.getElementById("tagList");
-    list.innerHTML = "";
-    for (let i = 0; i < count; i++) {
-      const t = document.createElement("span");
-      t.className = "tag";
-      t.textContent = `Region ${i + 1} blurred`;
-      list.appendChild(t);
-    }
   }
 </script>
 </body>
