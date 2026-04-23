@@ -54,7 +54,6 @@
 
     .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 2rem; }
 
-    /* ── Drop zone ── */
     .drop-zone {
       border: 2px dashed var(--border); border-radius: calc(var(--radius) - 4px);
       padding: 3rem 2rem; text-align: center; cursor: pointer;
@@ -67,7 +66,6 @@
     .drop-zone p strong { color: var(--accent); font-weight: 500; }
     .drop-zone .file-name { margin-top: .75rem; font-family: var(--font-mono); font-size: .78rem; color: var(--accent2); word-break: break-all; }
 
-    /* ── Preview ── */
     .preview-strip { display: none; gap: 1.25rem; margin-top: 1.5rem; }
     .preview-strip.visible { display: grid; grid-template-columns: 1fr 1fr; }
     .img-box { display: flex; flex-direction: column; gap: .5rem; }
@@ -77,87 +75,43 @@
 
     /* ── Risk panel ── */
     .risk-panel {
-      display: none;
-      margin-top: 1.5rem;
+      display: none; margin-top: 1.5rem;
       border: 1px solid var(--border);
       border-radius: calc(var(--radius) - 4px);
       overflow: hidden;
     }
     .risk-panel.visible { display: block; }
-
     .risk-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: .9rem 1.2rem;
-      background: rgba(255,255,255,.03);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .9rem 1.2rem; background: rgba(255,255,255,.03);
       border-bottom: 1px solid var(--border);
     }
-    .risk-title {
-      font-family: var(--font-mono);
-      font-size: .7rem;
-      letter-spacing: .12em;
-      color: var(--muted);
-      text-transform: uppercase;
-    }
-    .risk-badge {
-      font-family: var(--font-mono);
-      font-size: .75rem;
-      font-weight: 500;
-      padding: .25rem .7rem;
-      border-radius: 100px;
-      border: 1px solid currentColor;
-      letter-spacing: .08em;
-    }
-
+    .risk-title { font-family: var(--font-mono); font-size: .7rem; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+    .risk-badge { font-family: var(--font-mono); font-size: .75rem; font-weight: 500; padding: .25rem .7rem; border-radius: 100px; border: 1px solid currentColor; letter-spacing: .08em; }
     .risk-body { padding: 1.1rem 1.2rem; display: flex; flex-direction: column; gap: .9rem; }
 
-    /* score bar */
     .score-row { display: flex; align-items: center; gap: .9rem; }
     .score-num {
       font-family: var(--font-mono);
-      font-size: 2rem;
+      font-size: 1.8rem;
       font-weight: 500;
-      min-width: 3ch;
+      min-width: 4ch;
       line-height: 1;
     }
-    .bar-track {
-      flex: 1;
-      height: 8px;
-      background: var(--border);
-      border-radius: 100px;
-      overflow: hidden;
-    }
-    .bar-fill {
-      height: 100%;
-      border-radius: 100px;
-      width: 0%;
-      transition: width .6s cubic-bezier(.4,0,.2,1);
-    }
+    .bar-track { flex: 1; height: 8px; background: var(--border); border-radius: 100px; overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: 100px; width: 0%; transition: width .6s cubic-bezier(.4,0,.2,1); }
 
-    /* detected types */
     .type-row { display: flex; flex-wrap: wrap; gap: .4rem; }
     .type-chip {
-      font-family: var(--font-mono);
-      font-size: .68rem;
-      padding: .22rem .6rem;
-      border-radius: 100px;
-      border: 1px solid;
-      letter-spacing: .05em;
-      text-transform: uppercase;
+      font-family: var(--font-mono); font-size: .68rem; padding: .22rem .6rem;
+      border-radius: 100px; border: 1px solid; letter-spacing: .05em; text-transform: uppercase;
     }
 
-    /* verdict */
     .verdict {
-      font-family: var(--font-mono);
-      font-size: .75rem;
-      color: var(--muted);
-      line-height: 1.6;
-      padding-top: .2rem;
-      border-top: 1px solid var(--border);
+      font-family: var(--font-mono); font-size: .75rem; color: var(--muted);
+      line-height: 1.6; padding-top: .2rem; border-top: 1px solid var(--border);
     }
 
-    /* ── Buttons ── */
     .actions { margin-top: 1.5rem; display: flex; gap: .75rem; flex-wrap: wrap; }
     button { font-family: var(--font-head); font-weight: 700; font-size: .9rem; border: none; border-radius: 8px; cursor: pointer; padding: .75rem 1.5rem; transition: opacity .2s, transform .1s; }
     button:active { transform: scale(.98); }
@@ -166,7 +120,6 @@
     #resetBtn { background: transparent; border: 1px solid var(--border); color: var(--muted); }
     #resetBtn:hover { border-color: var(--danger); color: var(--danger); }
 
-    /* ── Status ── */
     .status-bar { margin-top: 1.25rem; display: none; align-items: center; gap: .6rem; font-family: var(--font-mono); font-size: .78rem; }
     .status-bar.visible { display: flex; }
     .spinner { width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; flex-shrink: 0; }
@@ -213,7 +166,6 @@
       </div>
     </div>
 
-    <!-- Risk Panel -->
     <div class="risk-panel" id="riskPanel">
       <div class="risk-header">
         <span class="risk-title">Privacy Risk Assessment</span>
@@ -221,7 +173,7 @@
       </div>
       <div class="risk-body">
         <div class="score-row">
-          <span class="score-num" id="scoreNum">0</span>
+          <span class="score-num" id="scoreNum">0%</span>
           <div class="bar-track">
             <div class="bar-fill" id="barFill"></div>
           </div>
@@ -331,20 +283,18 @@
   function showRisk(score, level, color, typesStr, blurredCount) {
     document.getElementById("riskPanel").classList.add("visible");
 
-    // Badge
     const badge = document.getElementById("riskBadge");
     badge.textContent = level;
     badge.style.color = color;
     badge.style.borderColor = color;
 
-    // Score + bar
-    document.getElementById("scoreNum").textContent = score;
+    document.getElementById("scoreNum").textContent = score + "%";
     document.getElementById("scoreNum").style.color = color;
+
     const fill = document.getElementById("barFill");
     fill.style.background = color;
     setTimeout(() => fill.style.width = score + "%", 50);
 
-    // Type chips
     const row = document.getElementById("typeRow");
     row.innerHTML = "";
     if (typesStr && typesStr !== "none") {
@@ -359,7 +309,6 @@
       });
     }
 
-    // Verdict text
     const verdicts = {
       LOW:      "✅ Minimal risk. No highly sensitive identifiers found.",
       MEDIUM:   "⚠️  Moderate risk. Some personal data detected and redacted.",
